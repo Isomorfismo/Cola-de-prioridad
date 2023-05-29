@@ -7,7 +7,8 @@ int main(){
     element pedido;
     int opcion, cantidad = 30;
     createQP(&qp);
-    while(opcion != 2 || !isEmptyQP(qp)){
+    printf("Inventario disponible: %d\n", cantidad);
+    while(opcion != 2){
         printf("Menu de pedidos\n");
         printf("1. Agregar pedido\n");
         printf("2. Salir\n");
@@ -15,19 +16,15 @@ int main(){
         if(opcion == 1){
             printf("Ingrese el nombre del cliente: ");
             scanf("%s", pedido.name);
-            printf("Ingrese el valor del pedido: ");
+            printf("Ingrese la cantidad de pedido: ");
             scanf("%d", &pedido.value);
-            printf("Ingrese la prioridad del pedido: ");
+            printf("Ingrese la prioridad del pedido (donde 0 > 1 > 2): ");
             scanf("%d", &pedido.priority);
             insertInPriority(&qp, pedido);
         }else{
             //Atender pedidos
             while(!isEmptyQP(qp)){
-                if(cantidad <= 0){
-                    printf("No hay mas productos disponibles\n");
-                    deleteQP(&qp);
-                    break;
-                }else{
+                if(pedido.value <= cantidad){
                     pedido = deleteInPriority(&qp);
                     printf("Pedido atendido\n");
                     printf("Nombre del cliente: %s\n", pedido.name);
@@ -36,7 +33,12 @@ int main(){
                     cantidad -= pedido.value;
                     printf("Cantidad disponible: %d\n", cantidad);
                 }
-            }
+                else{
+                    printf("Cantidad de producto no disponibles, no se puede procesar el pedido\n");
+                    deleteQP(&qp);
+                    break;
+                }
+            }printf("Fin\n");
         }
     }
 
